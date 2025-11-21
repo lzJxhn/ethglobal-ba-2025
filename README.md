@@ -122,13 +122,6 @@ Ensure every network listed here has a matching `RPC_URL_*` entry in `.env`.
 
 Note: you don't have to use mainnet as in the demo, you can also use testnets, just make sure to use testnets where stargate and aave contracts are deployed. [See Resources.](#helper-resources)
 
-### 3. Composer Deployment Configuration
-
-Both composers rely on addresses passed through constructor arguments. Decide which chain will host each composer and verify you have the corresponding addresses:
-
-- **Uniswap:** needs the canonical SwapRouter (per chain) plus the OFT that forwards tokens to it.
-- **Aave:** needs the Aave v3 Pool on the hub chain plus the Stargate pool on the source chain you’ll send from.
-
 ## Build
 
 Install dependencies and compile contracts:
