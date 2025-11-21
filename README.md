@@ -153,7 +153,7 @@ Run unit tests with `pnpm test`, or select suites via `pnpm test:hardhat` / `pnp
 ```bash
 AAVE_V3_POOL_ADDRESS="0xDstAavePool" \
 STARGATE_POOL_ADDRESS="0xDstStargateContract" \
-pnpm hardhat deploy --tags AaveV3Composer
+pnpm hardhat lz:deploy --tags AaveV3Composer
 ```
 
 The script asserts both addresses exist and belong to deployed contracts before broadcasting. Double-check that the Stargate pool you specify supports the token you’ll bridge (e.g., USDC on Arbitrum Sepolia) and that the Aave pool lives on the hub chain that will execute the supply.
