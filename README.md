@@ -96,9 +96,7 @@ cp .env.example .env
 PRIVATE_KEY="0xyourdeployer"
 ```
 
-- `SWAP_ROUTER_ADDRESS` / `OFT_ADDRESS` are required by `deploy/UniswapV3Composer.ts`.
-- `AAVE_V3_POOL_ADDRESS` / `STARGATE_POOL_ADDRESS` are required by `deploy/AaveV3Composer.ts` and by the `aave:supply` task.
-- Add any other per-chain secrets (like Tenderly keys) that your Hardhat networks need.
+- `AAVE_V3_POOL_ADDRESS` / `STARGATE_POOL_ADDRESS` are required by `deploy/AaveV3Composer.ts`.
 
 ### 2. Network Configuration
 
@@ -235,4 +233,4 @@ pnpm test:forge     # only Forge
 3. Extend `layerzero.*.config.ts` pathways so the new chain can talk to existing hubs/spokes.
 4. Re-run `lz:oapp:wire` with the updated config file.
 
-Need help? Reach out in the [LayerZero Discord](https://discord-layerzero.netlify.app/discord) or check the [Developer Docs](https://docs.layerzero.network/).
+Need help? Reach out in the [LayerZero Discord](https://discord.com/channels/554623348622098432/1136412205064130703) or check the [Developer Docs](https://docs.layerzero.network/).
