@@ -8,7 +8,7 @@
   <a href="https://layerzero.network" style="color: #a77dff">Homepage</a> | <a href="https://docs.layerzero.network/" style="color: #a77dff">Docs</a> | <a href="https://layerzero.network/developers" style="color: #a77dff">Developers</a>
 </p>
 
-<h1 align="center">LayerZero OFT Composer Examples</h1>
+<h1 align="center">Aave V3 Composer Example</h1>
 
 <p align="center">
   <a href="https://docs.layerzero.network/v2/developers/evm/oft/quickstart" style="color: #a77dff">Quickstart</a> | <a href="https://docs.layerzero.network/contracts/oapp-configuration" style="color: #a77dff">Configuration</a> | <a href="https://docs.layerzero.network/contracts/options" style="color: #a77dff">Message Execution Options</a> | <a href="https://docs.layerzero.network/v2/developers/evm/composer/overview" style="color: #a77dff">Composer Overview</a>
@@ -24,6 +24,7 @@
 - [Introduction](#introduction)
 - [Requirements](#requirements)
 - [Scaffold this Example](#scaffold-this-example)
+- [Helper Resources](#helper-resources)
 - [Helper Tasks](#helper-tasks)
 - [Setup](#setup)
   - [1. Environment Configuration](#1-environment-configuration)
@@ -31,17 +32,12 @@
   - [3. Composer Deployment Configuration](#3-composer-deployment-configuration)
 - [Build](#build)
 - [Deploy](#deploy)
-  - [UniswapV3 Composer Deployment](#uniswapv3-composer-deployment)
   - [AaveV3 Composer Deployment](#aavev3-composer-deployment)
 - [Enable Messaging (for manually deployed OFTs only)](#enable-messaging-for-manually-deployed-ofts-only)
 - [Stargate to Aave Supply Task](#stargate-to-aave-supply-task)
-- [Next Steps](#next-steps)
-- [Production Deployment Checklist](#production-deployment-checklist)
 - [Appendix](#appendix)
   - [Running Tests](#running-tests)
   - [Adding Other Chains](#adding-other-chains)
-  - [LayerZero Hardhat Helper Tasks (Detailed)](#layerzero-hardhat-helper-tasks-detailed)
-  - [Troubleshooting](#troubleshooting)
 
 ## Prerequisite Knowledge
 
@@ -49,13 +45,12 @@ Before diving into this repository you should understand:
 
 - [OFT Standard](https://docs.layerzero.network/v2/developers/evm/oft/quickstart) — how omnichain ERC20s are minted/burned across chains.
 - [Composer Pattern](https://docs.layerzero.network/v2/developers/evm/composer/overview) — how OFT transfers can be extended with compose payloads.
-- [Target Protocols](https://docs.uniswap.org/contracts/v3) — Uniswap V3 swaps and [Aave v3](https://docs.aave.com/developers/core-contracts/pool) lending flow.
+- [Aave v3](https://docs.aave.com/developers/core-contracts/pool) lending flow.
 
 ## Introduction
 
-The OFT Composer library demonstrates how to run **post-bridge workflows** on the destination chain. Two ready-to-run contracts live in `contracts/` and their deployment scripts live in `deploy/`:
+The OFT Composer library demonstrates how to run **post-bridge workflows** on the destination chain. Ready-to-run contract live in `contracts/` and it's deployment script live in `deploy/`:
 
-- `UniswapV3Composer` routes bridged tokens into a Uniswap V3 swap.
 - `AaveV3Composer` routes bridged tokens through Stargate and supplies them to an Aave v3 pool.
 
 Learn more about [OFT (Omnichain Fungible Token)](https://docs.layerzero.network/v2/concepts/glossary#oft-omnichain-fungible-token)
@@ -69,8 +64,15 @@ Learn more about [OFT (Omnichain Fungible Token)](https://docs.layerzero.network
 ## Scaffold this Example
 
 ```bash
-LZ_ENABLE_OFT_COMPOSERS=1 npx create-lz-oapp@latest 
+git clone https://github.com/lzJxhn/ethglobal-ba-2025
+
+cd ethglobal-ba-2025
 ```
+## Helper Resources
+
+- [Endpoint IDs and Addresses](https://docs.layerzero.network/v2/deployments/deployed-contracts)
+- [Stargate v2 Addresses](https://docs.layerzero.network/v2/deployments/oft-ecosystem-stargate-assets?stages=testnet&issuers=Stargate)
+- [Aave v3 Pool Addresses](https://aave.com/docs/resources/addresses) 
 
 ## Helper Tasks
 
@@ -81,10 +83,7 @@ Run `pnpm hardhat` to list every built-in task. The most relevant tasks for this
 - `lz:oft:send` — send OFT tokens without composer logic (useful for smoke tests).
 - `aave:supply` — bridge tokens through Stargate and compose into `AaveV3Composer`.
 
-
-
 ## Setup
-
 ### 1. Environment Configuration
 
 Copy the template and fill in every value before running builds, deploys, or tasks:
@@ -147,20 +146,6 @@ Run unit tests with `pnpm test`, or select suites via `pnpm test:hardhat` / `pnp
 
 ## Deploy
 
-### UniswapV3 Composer Deployment
-
-- Script: `examples/oft-composers/deploy/UniswapV3Composer.ts`
-- Required `.env` keys: `PRIVATE_KEY`, `SWAP_ROUTER_ADDRESS`, `OFT_ADDRESS`, the `RPC_URL_*` for the destination network.
-- Constructor: `(swapRouter, oft)`.
-
-```bash
-SWAP_ROUTER_ADDRESS="0xUniswapRouterOnBase" \
-OFT_ADDRESS="0xAssetOFTOnBase" \
-pnpm hardhat deploy --tags UniswapV3Composer
-```
-
-The script validates addresses via `ethers.utils.isAddress` and prints the deployed composer address. Rerun the command whenever you update swap routes or need to redeploy; set `skipIfAlreadyDeployed` to `true` if you want Hardhat Deploy to keep the existing instance.
-
 ### AaveV3 Composer Deployment
 
 - Script: `examples/oft-composers/deploy/AaveV3Composer.ts`
@@ -212,10 +197,6 @@ Skip this entire section if you are using the Aave/Stargate composer workflow de
 
 File: `examples/oft-composers/tasks/supplyAave.ts`
 
-- [Endpoint IDs and Addresses](https://docs.layerzero.network/v2/deployments/deployed-contracts)
-- [Stargate v2 Addresses](https://docs.layerzero.network/v2/deployments/oft-ecosystem-stargate-assets?stages=testnet&issuers=Stargate)
-- [Aave v3 Pool Addresses](https://aave.com/docs/resources/addresses) 
-
 1. Run the task with CLI parameters (replace placeholders with live addresses/amounts):
 
    ```bash
@@ -228,7 +209,7 @@ File: `examples/oft-composers/tasks/supplyAave.ts`
    ```
 
    - `amount-ld` is specified in local decimals (1,000,000 = 1 USDC if the pool uses 6 decimals).
-   - `compose-gas-limit` defaults to `395000`, which matches the gas used in `Options.newOptions()` inside `supplyAave.ts`.
+   - `compose-gas-limit` defaults to `395000`.
 
 2. The task automatically:
    - Encodes the compose payload (receiver address).
@@ -253,24 +234,5 @@ pnpm test:forge     # only Forge
 2. Add composer and OFT addresses for the new chain to your deployment config.
 3. Extend `layerzero.*.config.ts` pathways so the new chain can talk to existing hubs/spokes.
 4. Re-run `lz:oapp:wire` with the updated config file.
-
-### LayerZero Hardhat Helper Tasks (Detailed)
-
-```bash
-pnpm hardhat             # list every task
-pnpm hardhat lz:deploy   # deploy tagged contracts
-pnpm hardhat lz:oft:send # OFT transfers without compose logic
-pnpm hardhat lz:oapp:wire --oapp-config layerzero.composer.config.ts
-pnpm hardhat aave:supply # Stargate send + compose into Aave
-```
-
-### Troubleshooting
-
-1. **Missing `.env` entries** — double-check every section above; deployments will `assert(...)` if required addresses are absent.
-2. **Composer revert (swap or supply)** — inspect the compose payload and ensure gas limits cover both the OFT receive and the protocol action.
-3. **Slippage exceeded** — consider passing `--oft-cmd` or extending the payload so the composer can enforce min amounts.
-4. **Allowance errors** — rerun `aave:supply` after the script auto-approves the Stargate pool; you may need to increase allowance for repeated sends.
-
----
 
 Need help? Reach out in the [LayerZero Discord](https://discord-layerzero.netlify.app/discord) or check the [Developer Docs](https://docs.layerzero.network/).
