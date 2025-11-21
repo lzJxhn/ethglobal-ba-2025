@@ -103,24 +103,24 @@ PRIVATE_KEY="0xyourdeployer"
 Edit `hardhat.config.ts` and align networks with the Endpoint IDs you intend to use. Example configuration:
 
 ```ts
-const config: HardhatUserConfig = {
-  networks: {
-    base: {
-      eid: EndpointId.BASESEP_V2_TESTNET,
-      url: process.env.RPC_URL_BASESEP_TESTNET ?? 'https://base-sepolia.gateway.tenderly.co',
-      accounts,
-    },
-    arbitrum: {
-      eid: EndpointId.ARBSEP_V2_TESTNET,
-      url: process.env.RPC_URL_ARBSEP_TESTNET ?? 'https://arbitrum-sepolia.gateway.tenderly.co',
-      accounts,
-    },
-  },
-  // ...
-}
+   ...
+   networks: {
+        'arbitrum-mainnet': {
+            eid: EndpointId.ARBITRUM_V2_MAINNET,
+            url: process.env.RPC_URL_ARB || 'https://arbitrum.gateway.tenderly.co',
+            accounts,
+        },
+        'base-mainnet': {
+            eid: EndpointId.BASE_V2_MAINNET,
+            url: process.env.RPC_URL_BASE || 'https://base.gateway.tenderly.co',
+            accounts,
+        },
+    ...
 ```
 
 Ensure every network listed here has a matching `RPC_URL_*` entry in `.env`.
+
+Note: you don't have to use mainnet as in the demo, you can also use testnets, just make sure to use testnets where stargate and aave contracts are deployed. [See Resources.](#helper-resources)
 
 ### 3. Composer Deployment Configuration
 
