@@ -151,8 +151,8 @@ Run unit tests with `pnpm test`, or select suites via `pnpm test:hardhat` / `pnp
 - Constructor: `(aavePool, stargatePool)`.
 
 ```bash
-AAVE_V3_POOL_ADDRESS="0xAavePoolOnBase" \
-STARGATE_POOL_ADDRESS="0xStargatePoolOnArbitrum" \
+AAVE_V3_POOL_ADDRESS="0xDstAavePool" \
+STARGATE_POOL_ADDRESS="0xDstStargateContract" \
 pnpm hardhat deploy --tags AaveV3Composer
 ```
 
@@ -199,8 +199,8 @@ File: `examples/oft-composers/tasks/supplyAave.ts`
 
    ```bash
    pnpm hardhat aave:supply \
-     --src-oft <0xSourceStargateAddress> \
-     --dst-eid <DestinationEndpointID> \
+     --src-oft <0xSrcStargateContract> \
+     --dst-eid <DstEID> \
      --composer <0xComposerAddress> \
      --amount-ld <AmountInLocalDecimals> \
      --network <NetworkInHardhatConfig>
@@ -222,7 +222,6 @@ Monitor progress on [LayerZero Scan](https://layerzeroscan.com/).
 
 ```bash
 pnpm test
-pnpm test:hardhat   # only Hardhat
 pnpm test:forge     # only Forge
 ```
 
