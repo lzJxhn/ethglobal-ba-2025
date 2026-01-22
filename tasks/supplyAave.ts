@@ -150,6 +150,7 @@ async function sendSupply(hre: HardhatRuntimeEnvironment, args: SendArgs) {
     })
 
     logger.info(`Transaction submitted: ${tx.hash}`)
+    logger.info(`LayerZeroScan: https://layerzeroscan.com/tx/${tx.hash}`)
     await tx.wait()
     logger.info(`Transaction confirmed.`)
 }

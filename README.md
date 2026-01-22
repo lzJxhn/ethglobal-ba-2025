@@ -68,11 +68,12 @@ git clone https://github.com/lzJxhn/ethglobal-ba-2025
 
 cd ethglobal-ba-2025
 ```
+
 ## Helper Resources
 
 - [Endpoint IDs and Addresses](https://docs.layerzero.network/v2/deployments/deployed-contracts)
 - [Stargate v2 Addresses](https://docs.layerzero.network/v2/deployments/oft-ecosystem-stargate-assets?stages=testnet&issuers=Stargate)
-- [Aave v3 Pool Addresses](https://aave.com/docs/resources/addresses) 
+- [Aave v3 Pool Addresses](https://aave.com/docs/resources/addresses)
 
 ## Helper Tasks
 
@@ -84,6 +85,7 @@ Run `pnpm hardhat` to list every built-in task. The most relevant tasks for this
 - `aave:supply` — bridge tokens through Stargate and compose into `AaveV3Composer`.
 
 ## Setup
+
 ### 1. Environment Configuration
 
 Copy the template and fill in every value before running builds, deploys, or tasks:
@@ -94,9 +96,16 @@ cp .env.example .env
 
 ```bash
 PRIVATE_KEY="0xyourdeployer"
+
+# You can set addresses globally or per-network:
+AAVE_V3_POOL_ADDRESS_BASE_MAINNET="0x..."
+AAVE_V3_POOL_ADDRESS_ARBITRUM_MAINNET="0x..."
+STARGATE_POOL_ADDRESS_BASE_MAINNET="0x..."
+STARGATE_POOL_ADDRESS_ARBITRUM_MAINNET="0x..."
 ```
 
 - `AAVE_V3_POOL_ADDRESS` / `STARGATE_POOL_ADDRESS` are required by `deploy/AaveV3Composer.ts`.
+- You can also use network-specific variants (e.g. `AAVE_V3_POOL_ADDRESS_BASE_MAINNET`) which take precedence when deploying to that network.
 
 ### 2. Network Configuration
 
@@ -139,14 +148,18 @@ Run unit tests with `pnpm test`, or select suites via `pnpm test:hardhat` / `pnp
 
 ### AaveV3 Composer Deployment
 
-- Script: `examples/oft-composers/deploy/AaveV3Composer.ts`
+- Script: `deploy/AaveV3Composer.ts`
 - Required `.env` keys: `PRIVATE_KEY`, `AAVE_V3_POOL_ADDRESS`, `STARGATE_POOL_ADDRESS`, relevant `RPC_URL_*`.
 - Constructor: `(aavePool, stargatePool)`.
 
 ```bash
+# With addresses in .env (recommended for multi-network deploys):
+pnpm hardhat lz:deploy --tags AaveV3Composer
+
+# Or inline for a single network:
 AAVE_V3_POOL_ADDRESS="0xDstAavePool" \
 STARGATE_POOL_ADDRESS="0xDstStargateContract" \
-pnpm hardhat lz:deploy --tags AaveV3Composer
+pnpm hardhat lz:deploy --tags AaveV3Composer --network base-mainnet
 ```
 
 The script asserts both addresses exist and belong to deployed contracts before broadcasting. Double-check that the Stargate pool you specify supports the token you’ll bridge (e.g., USDC on Arbitrum Sepolia) and that the Aave pool lives on the hub chain that will execute the supply.
@@ -186,7 +199,7 @@ Skip this entire section if you are using the Aave/Stargate composer workflow de
 
 ## Stargate to Aave Supply Task
 
-File: `examples/oft-composers/tasks/supplyAave.ts`
+File: `tasks/supplyAave.ts`
 
 1. Run the task with CLI parameters (replace placeholders with live addresses/amounts):
 
@@ -206,8 +219,7 @@ File: `examples/oft-composers/tasks/supplyAave.ts`
    - Encodes the compose payload (receiver address).
    - Quotes Stargate fees and approves ERC20 transfers when needed.
    - Sends the transaction with the correct messaging fee (native or LZ token).
-
-Monitor progress on [LayerZero Scan](https://layerzeroscan.com/). 
+   - Prints a [LayerZero Scan](https://layerzeroscan.com/) link to track cross-chain delivery.
 
 ## Appendix
 
